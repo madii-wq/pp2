@@ -12,7 +12,7 @@ y = 10
 z = x + y
 print(z)
 #EX 5
-x,y,z = "Orange", "Banana", "Cherry
+x,y,z = "Orange", "Banana", "Cherry"
 #EX 6
 x=y=z="Orange"
 #EX 7
