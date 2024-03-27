@@ -1,37 +1,55 @@
 import pygame
-import math
+import sys
 import datetime
 
 pygame.init()
 
-running = True
-clock = pygame.time.Clock()
-screen = pygame.display.set_mode((600, 600))
-image = pygame.image.load("clock_background.jpg")
-def convert_degrees(r, theta):
-    y = math.cos(2*math.pi*theta/360)*r
-    x = math.sin(2*math.pi*theta/360)*r
-    return x+300, 300 - y
-    
-while running:
-    screen.fill((255,255,255))
-    current = datetime.datetime.now()
-    screen.blit(image, (0,0))
+window = pygame.display.set_mode((500, 500))
 
-    minite = current.minute
-    second = current.second
-    
+current_time = datetime.datetime.now()
+
+left = pygame.image.load('lab7/background/left.jpg')
+left = pygame.transform.scale(left, (300, 300))
+
+right = pygame.image.load('lab7/background/right.jpg')
+right = pygame.transform.scale(right, (200, 200))
+
+mickie = pygame.image.load('lab7/background/mickie.jpg')
+
+left_rect = left.get_rect()
+center_l = left_rect.center
+
+left.set_colorkey((0, 0, 0))
+
+right_rect = right.get_rect()
+center_r = right_rect.center
+
+right.set_colorkey((0, 0, 0))
+
+second = current_time.second
+
+minute = current_time.minute
+
+clock = pygame.time.Clock()
+
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
             pygame.quit()
-    #minute 
-    theta = (minite + second/60)*(360/60)
-    r = 120
-    pygame.draw.line(screen, (0,0,0), (300,300), convert_degrees(r, theta),6)
-    #second
-    theta = second
-    r = 140
-    pygame.draw.line(screen, (255,0,0), (300,300), convert_degrees(r, theta),4)
-    clock.tick(60)
-    pygame.display.flip() 
+            sys.exit()
+
+    second -= 6
+    minute -= 0.5
+    rleft = pygame.transform.rotate(left, second)
+    left_rect = rleft.get_rect(center=center_l)
+    left_rect.move_ip(100, 100)
+
+    rright = pygame.transform.rotate(right, minute)
+    right_rect = rright.get_rect(center=center_r)
+    right_rect.move_ip(150, 150)
+
+    window.blit(mickie, (0, 0))
+    window.blit(rright, right_rect.topleft)
+    window.blit(rleft, left_rect.topleft)
+    pygame.display.update()
+    clock.tick(1)

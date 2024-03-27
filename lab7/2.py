@@ -2,9 +2,9 @@ import pygame
 
 pygame.init()
 
-my_music = ["merey-betperde-speed-up_(muzzonas.ru).mp3",
-"Kazybek_Kuraiysh_-_Taptym-au_sen_(musmore.com).mp3",
-"Kazybek Kuraiysh - Alystama Menen.mp3"]
+my_music = ["lab7/music/merey-betperde-speed-up_(muzzonas.ru).mp3",
+"lab7/music/Kazybek_Kuraiysh_-_Taptym-au_sen_(musmore.com).mp3",
+"lab7/music/Kazybek Kuraiysh - Alystama Menen.mp3"]
 
 running = True
 has_ever_played = False
@@ -13,8 +13,8 @@ pygame.mixer.music.load(my_music[queue])
 
 screen = pygame.display.set_mode((300, 300))
 caption = pygame.display.set_caption("PLAYER")
-icon = pygame.display.set_icon(pygame.image.load("background_for_music.jpg"))
-background = pygame.image.load("background_for_music.jpg")
+icon = pygame.display.set_icon(pygame.image.load("lab7/background/background_for_music.jpg"))
+background = pygame.image.load("lab7/background/background_for_music.jpg")
 stoping = False
 while running:
     screen.blit(background, (0,0))
