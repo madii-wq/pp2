@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 # Define block size and snake speed
 snake_block = 10
 snake_speed = 15
-
+accelerator = 1.0
 # Set up fonts
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
@@ -38,7 +38,9 @@ limit_score = 100
 def Your_score(score):
     value = score_font.render("Your Score: " + str(score), True, red)
     dis.blit(value, [0, 0])
-
+def Your_level(score):
+    value = score_font.render("level: " + str(int(score/20)), True, red)
+    dis.blit(value, [400, 0])
 # Function to draw the snake
 def our_snake(snake_block, snake_list):
     for x in snake_list:
@@ -66,13 +68,19 @@ def gameLoop():
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
     direction = None
-
+    
+    fruit_width = 1
+    
     while not game_over:
+        #init our globals
+        global snake_speed
+        global accelerator
         # Check if the game is over
         while game_close:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             Your_score(Length_of_snake - 1)
+            Your_level(Length_of_snake - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -112,7 +120,7 @@ def gameLoop():
         y1 += y1_change
         dis.fill(blue)
         # Draw the food
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+        pygame.draw.rect(dis, green, [foodx, foody, fruit_width*snake_block, fruit_width*snake_block])
         # Add snake's head position to snake list
         snake_Head = []
         snake_Head.append(x1)
@@ -128,19 +136,21 @@ def gameLoop():
 
         # Draw the snake
         our_snake(snake_block, snake_List)
-        # Display score
+        # Display score and level
         Your_score(Length_of_snake - 1)
+        Your_level(Length_of_snake - 1)
 
         pygame.display.update()
 
         # Generate new food when snake eats the current food
-        if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
-            Length_of_snake += 1
-
-        clock.tick(snake_speed)
-        
+        if (x1 == foodx or x1 == foodx + fruit_width*snake_block - snake_block) and (y1 == foody or y1 == foody + fruit_width*snake_block- snake_block):
+           foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+           foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+           Length_of_snake += fruit_width
+           accelerator += 0.005
+           fruit_width = random.randint(1,2)
+        #ticks
+        clock.tick(snake_speed*accelerator)
         # Check if the score limit is reached
         if limit_score == Length_of_snake - 1:
             game_close = True
